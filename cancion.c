@@ -220,3 +220,84 @@ printf("No se encontraron canciones.\n");
 else
 printf("Total encontrados: %d\n", encontrados);
 }
+void actualizarCancion(struct Cancion *canciones, int total) {
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+char codigo[MAX_CODIGO + 1];
+printf("Ingrese codigo de la cancion a actualizar: ");
+scanf("%15s", codigo);
+limpiarBuffer();
+int idx = buscarIndicePorCodigo(canciones, total, codigo);
+if (idx == -1) {
+printf("Cancion no encontrada.\n");
+return;
+}
+printf("\nCancion actual:\n"
+"Codigo: %s\n"
+"Titulo: %s\n"
+"Clasificacion: %s\n"
+"Compositor: %s\n"
+"Artista: %s\n"
+"Duracion: ",
+canciones[idx].codigo,
+canciones[idx].titulo,
+canciones[idx].clasificacion,
+canciones[idx].compositor,
+canciones[idx].artista);
+mostrarDuracion(canciones[idx].duracion_segundos);
+printf("\n--- Deje en blanco para mantener valor actual ---\n");
+char temp[MAX_TEXTO];
+printf("Nuevo titulo [%s]: ", canciones[idx].titulo);
+leerLinea(NULL, temp, MAX_TEXTO);
+if (strlen(temp) > 0) strcpy(canciones[idx].titulo, temp);
+printf("Nueva clasificacion [%s]: ", canciones[idx].clasificacion);
+leerLinea(NULL, temp, MAX_TEXTO);
+if (strlen(temp) > 0) strcpy(canciones[idx].clasificacion, temp);
+printf("Nuevo compositor [%s]: ", canciones[idx].compositor);
+leerLinea(NULL, temp, MAX_TEXTO);
+if (strlen(temp) > 0) strcpy(canciones[idx].compositor, temp);
+printf("Nuevo artista [%s]: ", canciones[idx].artista);
+leerLinea(NULL, temp, MAX_TEXTO);
+if (strlen(temp) > 0) strcpy(canciones[idx].artista, temp);
+printf("Nueva duracion en segundos [%d]: ", 
+canciones[idx].duracion_segundos);
+char durStr[20];
+if (fgets(durStr, sizeof(durStr), stdin)) {
+durStr[strcspn(durStr, "\n")] = '\0';
+if (strlen(durStr) > 0) {
+int nuevaDur = atoi(durStr);
+if (nuevaDur > 0) canciones[idx].duracion_segundos = nuevaDur;
+}
+}
+printf("Cancion actualizada exitosamente.\n");
+}
+void eliminarCancion(struct Cancion *canciones, int *total) {
+if (*total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+char codigo[MAX_CODIGO + 1];
+printf("Ingrese codigo de la cancion a eliminar: ");
+scanf("%15s", codigo);
+limpiarBuffer();
+int idx = buscarIndicePorCodigo(canciones, *total, codigo);
+if (idx == -1) {
+printf("Cancion no encontrada.\n");
+return;
+}
+printf("\nVa a eliminar: %s - %s\n", canciones[idx].codigo, 
+canciones[idx].titulo);
+printf("Confirmar (1=Si, 0=No): ");
+int confirmar;
+scanf("%d", &confirmar);
+limpiarBuffer();
+if (confirmar != 1) {
+printf("Eliminacion cancelada.\n");
+return;
+}
+canciones[idx] = canciones[*total - 1];
+(*total)--;
+printf("Cancion eliminada exitosamente.\n");
+}
