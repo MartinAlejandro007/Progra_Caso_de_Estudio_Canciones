@@ -35,9 +35,8 @@ void tiempoTotalPorClasificacion(const struct Cancion *canciones, int total);
 void guardarCSV(const struct Cancion *canciones, int total);
 void cargarCSV(struct Cancion *canciones, int *total);
 
-// Utilidades
-int buscarIndicePorCodigo(const struct Cancion *canciones, int total, const char *codigo);
-void consultarDuracionCancion(const struct Cancion *canciones, int total);
+// Validaciones y utilidades
+int existeCodigo(const struct Cancion *canciones, int total, const char *codigo);
 void limpiarBuffer();
 
-#endif
+#endif 
