@@ -394,3 +394,57 @@ printf("Clasificacion con mas canciones: %s (%d canciones)\n",
 unicas[maxIdx], conteos[maxIdx]);
 }
 }
+void tiempoTotalPorClasificacion(const struct Cancion *canciones, int total)
+{
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+char unicas[MAX_CANCIONES][MAX_TEXTO];
+int conteos[MAX_CANCIONES];
+int tiempos[MAX_CANCIONES];
+int n = agruparClasificaciones(canciones, total, unicas, conteos, tiempos);
+printf("\n--- Tiempo total por clasificacion ---\n");
+for (int i = 0; i < n; i++) {
+printf("%s: ", unicas[i]);
+mostrarDuracion(tiempos[i]);
+}
+}
+void consultarDuracionCancion(const struct Cancion *canciones, int total) {
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+char codigo[MAX_CODIGO + 1];
+printf("Ingrese codigo de la cancion: ");
+scanf("%15s", codigo);
+limpiarBuffer();
+int idx = buscarIndicePorCodigo(canciones, total, codigo);
+if (idx == -1) {
+printf("Cancion no encontrada.\n");
+} else {
+printf("Duracion de %s: ", canciones[idx].titulo);
+mostrarDuracion(canciones[idx].duracion_segundos);
+}
+}
+void guardarCSV(const struct Cancion *canciones, int total) {
+FILE *fp = fopen("canciones.csv", "w");
+if (!fp) {
+printf("Error al abrir archivo para guardar.\n");
+return;
+}
+fprintf(fp,
+"codigo_cancion;titulo;clasificacion;compositor;artista;duracion_segundos\n"
+);
+for (int i = 0; i < total; i++) {
+fprintf(fp, "%s;%s;%s;%s;%s;%d\n",
+canciones[i].codigo,
+canciones[i].titulo,
+canciones[i].clasificacion,
+canciones[i].compositor,
+canciones[i].artista,
+canciones[i].duracion_segundos);
+}
+fclose(fp);
+printf("Datos guardados en canciones.csv (%d canciones).\n", total);
+}
