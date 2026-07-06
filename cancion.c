@@ -301,3 +301,96 @@ canciones[idx] = canciones[*total - 1];
 (*total)--;
 printf("Cancion eliminada exitosamente.\n");
 }
+void mostrarDuracion(int segundos) {
+int min = segundos / 60;
+int seg = segundos % 60;
+printf("%02d:%02d\n", min, seg);
+}
+void calcularTiempoTotal(const struct Cancion *canciones, int total) {
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+int suma = 0;
+for (int i = 0; i < total; i++) suma += canciones[i].duracion_segundos;
+printf("Tiempo total de reproduccion: ");
+mostrarDuracion(suma);
+printf("(%d segundos en total)\n", suma);
+}
+void cancionMasLarga(const struct Cancion *canciones, int total) {
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+int idx = 0;
+for (int i = 1; i < total; i++) {
+if (canciones[i].duracion_segundos > canciones[idx].duracion_segundos)
+idx = i;
+}
+printf("Cancion mas larga: %s - %s (", canciones[idx].artista,
+canciones[idx].titulo);
+mostrarDuracion(canciones[idx].duracion_segundos);
+printf(")\n");
+}
+void cancionMasCorta(const struct Cancion *canciones, int total) {
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+int idx = 0;
+for (int i = 1; i < total; i++) {
+if (canciones[i].duracion_segundos < canciones[idx].duracion_segundos)
+idx = i;
+}
+printf("Cancion mas corta: %s - %s (", canciones[idx].artista,
+canciones[idx].titulo);
+mostrarDuracion(canciones[idx].duracion_segundos);
+printf(")\n");
+}
+void contarPorClasificacion(const struct Cancion *canciones, int total) {
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+char unicas[MAX_CANCIONES][MAX_TEXTO];
+int conteos[MAX_CANCIONES];
+int tiempos[MAX_CANCIONES]; /* no se usa aqui, pero agrupar lo llena */
+int n = agruparClasificaciones(canciones, total, unicas, conteos, tiempos);
+printf("\n--- Canciones por clasificacion ---\n");
+for (int i = 0; i < n; i++)
+printf("%s: %d cancion(es)\n", unicas[i], conteos[i]);
+}
+void duracionPromedio(const struct Cancion *canciones, int total) {
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+int suma = 0;
+for (int i = 0; i < total; i++) suma += canciones[i].duracion_segundos;
+float promedio = (float)suma / total;
+int min = (int)(promedio / 60);
+int seg = (int)(promedio) % 60;
+printf("Duracion promedio: %02d:%02d (%.1f segundos)\n", min, seg,
+promedio);
+}
+void clasificacionMasFrecuente(const struct Cancion *canciones, int total) {
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+char unicas[MAX_CANCIONES][MAX_TEXTO];
+int conteos[MAX_CANCIONES];
+int tiempos[MAX_CANCIONES];
+int n = agruparClasificaciones(canciones, total, unicas, conteos, tiempos);
+int maxIdx = 0;
+for (int i = 1; i < n; i++) {
+if (conteos[i] > conteos[maxIdx]) {
+maxIdx = i;
+}
+}
+/* Si n==0 no pasa porque total>0, pero por robustez: */
+if (n > 0) {
+printf("Clasificacion con mas canciones: %s (%d canciones)\n",
+unicas[maxIdx], conteos[maxIdx]);
+}
+}
