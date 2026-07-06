@@ -448,3 +448,28 @@ canciones[i].duracion_segundos);
 fclose(fp);
 printf("Datos guardados en canciones.csv (%d canciones).\n", total);
 }
+void cargarCSV(struct Cancion *canciones, int *total) {
+FILE *fp = fopen("canciones.csv", "r");
+if (!fp) {
+printf("No existe archivo previo (canciones.csv). Empezando biblioteca
+vacia.\n");
+return;
+}
+char linea[512];
+if (!fgets(linea, sizeof(linea), fp)) {
+fclose(fp);
+return;
+}
+*total = 0;
+while (fgets(linea, sizeof(linea), fp) && *total < MAX_CANCIONES) {
+struct Cancion c;
+if (sscanf(linea, "%14[^;];%99[^;];%99[^;];%99[^;];%99[^;];%d",
+c.codigo, c.titulo, c.clasificacion,
+c.compositor, c.artista, &c.duracion_segundos) == 6) {
+canciones[*total] = c;
+(*total)++;
+}
+}
+fclose(fp);
+printf("%d canciones cargadas desde canciones.csv.\n", *total);
+}
