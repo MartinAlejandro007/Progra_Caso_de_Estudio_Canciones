@@ -151,3 +151,72 @@ canciones[*total] = nueva;
 (*total)++;
 printf("Cancion registrada exitosamente.\n");
 }
+void listarCanciones(const struct Cancion *canciones, int total) {
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+printf("\n%-15s %-25s %-15s %-20s %-20s %s\n",
+"CODIGO", "TITULO", "CLASIFICACION", "COMPOSITOR", "ARTISTA", "DURACION");
+printf("---------------------------------------------------------------------------------------------------------------------\n");
+for (int i = 0; i < total; i++) {
+printf("%-15s %-25s %-15s %-20s %-20s ",
+canciones[i].codigo,
+canciones[i].titulo,
+canciones[i].clasificacion,
+canciones[i].compositor,
+canciones[i].artista);
+mostrarDuracion(canciones[i].duracion_segundos);
+}
+}
+void buscarCancion(const struct Cancion *canciones, int total) {
+if (total == 0) {
+printf("No hay canciones registradas.\n");
+return;
+}
+int criterio;
+printf("\nBuscar por:\n"
+"1. Codigo\n"
+"2. Titulo\n"
+"3. Compositor\n"
+"4. Artista\n"
+"5. Clasificacion\n"
+"Seleccione criterio: ");
+scanf("%d", &criterio);
+limpiarBuffer();
+char busqueda[MAX_TEXTO];
+leerLinea("Ingrese termino de busqueda: ", busqueda, MAX_TEXTO);
+int encontrados = 0;
+for (int i = 0; i < total; i++) {
+int coincide = 0;
+switch (criterio) {
+case 1: coincide = (strcmp(canciones[i].codigo, busqueda) == 0); break;
+case 2: coincide = (strstr(canciones[i].titulo, busqueda) != NULL); break;
+case 3: coincide = (strstr(canciones[i].compositor, busqueda) != NULL); 
+break;
+case 4: coincide = (strstr(canciones[i].artista, busqueda) != NULL); break;
+case 5: coincide = (strcmp(canciones[i].clasificacion, busqueda) == 0); 
+break;
+default: printf("Criterio invalido.\n"); return;
+}
+if (coincide) {
+if (encontrados == 0) {
+printf("\n%-15s %-25s %-15s %-20s %-20s %s\n",
+"CODIGO", "TITULO", "CLASIFICACION", "COMPOSITOR", "ARTISTA", "DURACION");
+printf("---------------------------------------------------------------------------------------------------------------------\n");
+}
+printf("%-15s %-25s %-15s %-20s %-20s ",
+canciones[i].codigo,
+canciones[i].titulo,
+canciones[i].clasificacion,
+canciones[i].compositor,
+canciones[i].artista);
+mostrarDuracion(canciones[i].duracion_segundos);
+encontrados++;
+}
+}
+if (encontrados == 0)
+printf("No se encontraron canciones.\n");
+else
+printf("Total encontrados: %d\n", encontrados);
+}
