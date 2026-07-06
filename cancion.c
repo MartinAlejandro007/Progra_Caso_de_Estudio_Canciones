@@ -45,3 +45,109 @@ void limpiarBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
+int buscarIndicePorCodigo(const struct Cancion *canciones, int total, const 
+char *codigo) {
+for (int i = 0; i < total; i++) {
+if (strcmp(canciones[i].codigo, codigo) == 0)
+return i;
+}
+return -1;
+}
+void registrarCancion(struct Cancion *canciones, int *total) {
+if (*total >= MAX_CANCIONES) {
+printf("Error: Biblioteca llena.\n");
+return;
+}
+struct Cancion nueva;
+printf("Codigo (unico, sin espacios, max %d chars): ", MAX_CODIGO);
+scanf("%15s", nueva.codigo);
+limpiarBuffer();
+if (strlen(nueva.codigo) == 0) {
+printf("Error: codigo obligatorio.\n");
+return;
+}
+if (buscarIndicePorCodigo(canciones, *total, nueva.codigo) != -1) {
+printf("Error: ese codigo ya existe.\n");
+return;
+}
+leerLinea("Titulo: ", nueva.titulo, MAX_TEXTO);
+if (strlen(nueva.titulo) == 0) {
+printf("Error: titulo obligatorio.\n");
+return;
+}
+leerLinea("Clasificacion (pop/rock/jazz/salsa/clasica/electronica/etc): ",
+nueva.clasificacion, MAX_TEXTO);
+leerLinea("Compositor: ", nueva.compositor, MAX_TEXTO);
+if (strlen(nueva.compositor) == 0) {
+printf("Error: compositor obligatorio.\n");
+return;
+}
+leerLinea("Artista: ", nueva.artista, MAX_TEXTO);
+if (strlen(nueva.artista) == 0) {
+printf("Error: artista obligatorio.\n");
+return;
+}
+printf("Duracion en segundos (> 0): ");
+scanf("%d", &nueva.duracion_segundos);
+limpiarBuffer();
+if (nueva.duracion_segundos <= 0) {
+printf("Error: duracion debe ser mayor a 0.\n");
+return;
+}
+canciones[*total] = nueva;
+(*total)++;
+printf("Cancion registrada exitosamente.\n");
+}
+int buscarIndicePorCodigo(const struct Cancion *canciones, int total, const 
+char *codigo) {
+for (int i = 0; i < total; i++) {
+if (strcmp(canciones[i].codigo, codigo) == 0)
+return i;
+}
+return -1;
+}
+void registrarCancion(struct Cancion *canciones, int *total) {
+if (*total >= MAX_CANCIONES) {
+printf("Error: Biblioteca llena.\n");
+return;
+}
+struct Cancion nueva;
+printf("Codigo (unico, sin espacios, max %d chars): ", MAX_CODIGO);
+scanf("%15s", nueva.codigo);
+limpiarBuffer();
+if (strlen(nueva.codigo) == 0) {
+printf("Error: codigo obligatorio.\n");
+return;
+}
+if (buscarIndicePorCodigo(canciones, *total, nueva.codigo) != -1) {
+printf("Error: ese codigo ya existe.\n");
+return;
+}
+leerLinea("Titulo: ", nueva.titulo, MAX_TEXTO);
+if (strlen(nueva.titulo) == 0) {
+printf("Error: titulo obligatorio.\n");
+return;
+}
+leerLinea("Clasificacion (pop/rock/jazz/salsa/clasica/electronica/etc): ",
+nueva.clasificacion, MAX_TEXTO);
+leerLinea("Compositor: ", nueva.compositor, MAX_TEXTO);
+if (strlen(nueva.compositor) == 0) {
+printf("Error: compositor obligatorio.\n");
+return;
+}
+leerLinea("Artista: ", nueva.artista, MAX_TEXTO);
+if (strlen(nueva.artista) == 0) {
+printf("Error: artista obligatorio.\n");
+return;
+}
+printf("Duracion en segundos (> 0): ");
+scanf("%d", &nueva.duracion_segundos);
+limpiarBuffer();
+if (nueva.duracion_segundos <= 0) {
+printf("Error: duracion debe ser mayor a 0.\n");
+return;
+}
+canciones[*total] = nueva;
+(*total)++;
+printf("Cancion registrada exitosamente.\n");
+}
